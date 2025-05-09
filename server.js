@@ -9,16 +9,8 @@ const app = express();
 // Connect Database
 connectDB();
 
-// CORS OPTIONS
-const corsOptions = {
-  origin: 'https://sampathresidency-palani.netlify.app/',
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // handle preflight
-
+// Middleware
+app.use(cors());
 app.use(express.json());
 
 // Routes
