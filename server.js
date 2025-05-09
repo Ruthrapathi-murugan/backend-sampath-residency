@@ -11,7 +11,7 @@ connectDB();
 
 // CORS OPTIONS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://sampathresidency-palani.netlify.app/',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 };
