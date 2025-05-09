@@ -9,8 +9,16 @@ const app = express();
 // Connect Database
 connectDB();
 
-// Middleware
-app.use(cors());
+// CORS OPTIONS
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // handle preflight
+
 app.use(express.json());
 
 // Routes
