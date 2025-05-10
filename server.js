@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+
 const connectDB = require('./config/db');
 const bookingRoutes = require('./routes/bookingRoutes');
 
@@ -10,7 +10,15 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+const cors = require('cors');
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://sampathresidency-palani.netlify.app'],
+    methods: ['GET', 'POST'],
+    credentials: true
+  }));
+  
+  app.options('*', cors());  
+
 app.use(express.json());
 
 // Routes
