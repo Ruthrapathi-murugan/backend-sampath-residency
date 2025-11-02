@@ -3,12 +3,15 @@ const sendEmail = require('../config/email');
 
 exports.createBooking = async (req, res) => {
   try {
+    // 🟢 Log incoming data before anything else
+    console.log("📦 Incoming booking data:", req.body);
+
     const booking = new Booking(req.body);
     await booking.save();
 
     // Format dates for email
     const formatDate = (date) => new Date(date).toLocaleDateString();
-    
+
     // Customer email
     const customerMail = {
       to: booking.email,
@@ -39,19 +42,26 @@ exports.createBooking = async (req, res) => {
       `
     };
 
-    await Promise.all([
-      sendEmail(customerMail),
-      sendEmail(adminMail)
-    ]);
+    // 🟢 Try sending emails but don’t let email failure block booking save
+    try {
+      await Promise.all([
+        sendEmail(customerMail),
+        sendEmail(adminMail)
+      ]);
+    } catch (emailErr) {
+      console.error("⚠️ Email sending failed:", emailErr.message);
+    }
 
     res.status(201).json({
       success: true,
       data: booking
     });
+
   } catch (error) {
+    console.error("❌ Booking creation error:", error);
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message || 'Unknown error'
     });
   }
 };
