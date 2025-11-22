@@ -1,9 +1,9 @@
-const Booking = require('../models/Booking');
-const sendEmail = require('../config/email');
+const Booking = require("../models/Booking");
+const sendEmail = require("../config/email");
 
+// CREATE BOOKING
 exports.createBooking = async (req, res) => {
   try {
-    // 🟢 Log incoming data before anything else
     console.log("📦 Incoming booking data:", req.body);
 
     const booking = new Booking(req.body);
@@ -42,26 +42,27 @@ exports.createBooking = async (req, res) => {
       `
     };
 
-    // 🟢 Try sending emails but don’t let email failure block booking save
+    // Send emails (do not block booking on email failure)
     try {
-      await Promise.all([
-        sendEmail(customerMail),
-        sendEmail(adminMail)
-      ]);
+      await Promise.all([ sendEmail(customerMail), sendEmail(adminMail) ]);
     } catch (emailErr) {
-      console.error("⚠️ Email sending failed:", emailErr.message);
+      console.error("⚠️ Email sending failed:", emailErr.message || emailErr);
     }
 
-    res.status(201).json({
-      success: true,
-      data: booking
-    });
-
+    res.status(201).json({ success: true, data: booking });
   } catch (error) {
     console.error("❌ Booking creation error:", error);
-    res.status(400).json({
-      success: false,
-      error: error.message || 'Unknown error'
-    });
+    res.status(400).json({ success: false, error: error.message || "Unknown error" });
+  }
+};
+
+// GET ALL BOOKINGS (must be at top-level, not nested)
+exports.getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().sort({ createdAt: -1 }); // latest first
+    res.status(200).json({ success: true, count: bookings.length, data: bookings });
+  } catch (error) {
+    console.error("❌ Error fetching bookings:", error);
+    res.status(500).json({ success: false, error: "Server Error" });
   }
 };
