@@ -8,7 +8,7 @@ Hotel basic info:
 - Check-in time: 12:00 PM
 - Check-out time: 11:00 AM
 - Facilities: AC/Non-AC rooms, parking, 24/7 front desk, hot water, Wi-Fi.
-- Contact: +91-96263xxxxx (example)
+- Contact: main contact number is +91 98945-74934 alternative this  +91-9626380310 
 - Room types: Single, Double, Deluxe, Suite.
 - Room pricing: 
   - Single: ₹800/night
